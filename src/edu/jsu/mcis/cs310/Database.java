@@ -25,6 +25,24 @@ public class Database {
         String result = null;
         
         // INSERT YOUR CODE HERE
+        try{
+            String query = "SELECT * FROM section WHERE termid=? AND subjectid=? AND num=?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+             pstmt.setInt(1, termid);
+             pstmt.setString(2, subjectid);
+             pstmt.setString(3, num);
+             
+             boolean hasresults = pstmt.execute();
+             
+             if (hasresults){
+             ResultSet resultset = pstmt.getResultSet();
+             result = getResultSetAsJSON(resultset);
+             }
+             
+                    
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        //End of my code
         
         return result;
         
@@ -35,7 +53,20 @@ public class Database {
         int result = 0;
         
         // INSERT YOUR CODE HERE
-        
+        try{
+             String query = "INSERT INTO registration (studentid, termid, crn) VALUES (?, ?, ?)";
+             PreparedStatement pstUpdate = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstUpdate.setInt(1, studentid);
+             pstUpdate.setInt(2, termid);
+             pstUpdate.setInt(3, crn);
+                
+                /* Execute Update Query */
+                
+             result = pstUpdate.executeUpdate();
+
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        //End of my Code
         return result;
         
     }
@@ -45,7 +76,17 @@ public class Database {
         int result = 0;
         
         // INSERT YOUR CODE HERE
-        
+        try{
+            String query ="DELETE FROM registration WHERE studentid = ? AND termid = ? AND crn = ?";
+            PreparedStatement pstUpdate = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstUpdate.setInt(1, studentid);
+             pstUpdate.setInt(2, termid);
+             pstUpdate.setInt(3, crn);
+             
+             result = pstUpdate.executeUpdate();
+        }
+        catch (Exception e) { e.printStackTrace(); }
+       //End of my code
         return result;
         
     }
@@ -55,7 +96,16 @@ public class Database {
         int result = 0;
         
         // INSERT YOUR CODE HERE
-        
+        try{
+            String query = "DELETE FROM registration WHERE studentid = ? AND termid = ?";
+            PreparedStatement pstUpdate = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+             pstUpdate.setInt(1, studentid);
+             pstUpdate.setInt(2, termid);
+             
+             result = pstUpdate.executeUpdate();
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        //End of my code
         return result;
         
     }
@@ -65,7 +115,23 @@ public class Database {
         String result = null;
         
         // INSERT YOUR CODE HERE
-        
+        try{
+            String query = "SELECT * FROM (registration JOIN section ON registration.crn = section.crn) WHERE registration.termid = ? AND studentid = ?";
+            PreparedStatement pstmt = connection.prepareStatement(query);
+            pstmt.setInt(1, studentid);
+            pstmt.setInt(2, termid);
+             
+             boolean hasresults = pstmt.execute();
+             
+             if (hasresults){
+             ResultSet resultset = pstmt.getResultSet();
+             result = getResultSetAsJSON(resultset);
+             }
+             
+                    
+        }
+        catch (Exception e) { e.printStackTrace(); }
+        //End of my code
         return result;
         
     }
